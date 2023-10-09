@@ -84,15 +84,15 @@
 
  transformToMatrix(data) {
     // Extract unique labels (countries) from data
-    const labels = [...new Set(data.map(d => d.dimensions_1.label).concat(data.map(d => d.dimensions_2.label)))];
+    const labels = [...new Set(data.map(d => d.dimensions_0.label).concat(data.map(d => d.dimensions_1.label)))];
 
     // Initialize an empty matrix with zeros
     const matrix = Array(labels.length).fill(null).map(() => Array(labels.length).fill(0));
 
     // Fill the matrix based on data
     data.forEach(d => {
-        const sourceIndex = labels.indexOf(d.dimensions_1.label);
-        const targetIndex = labels.indexOf(d.dimensions_2.label);
+        const sourceIndex = labels.indexOf(d.dimensions_0.label);
+        const targetIndex = labels.indexOf(d.dimensions_1.label);
         const value = d.measures_0.raw;
         matrix[sourceIndex][targetIndex] = value;
     });

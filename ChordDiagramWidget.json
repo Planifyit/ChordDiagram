@@ -1,0 +1,55 @@
+{
+    "name": "ChordDiagramWidget",
+    "description": "Chord Diagram Widget",
+    "newInstancePrefix": "ChordDiagramWidget",
+    "eula": "",
+    "license": "",
+    "id": "ChordDiagramWidget",
+    "version": "1.0.0",
+    "supportsLinkedAnalysisFilterOnSelection": true,
+    "icon": "https://planifyit.github.io/Pie_chart/PlanifyIT_Logo2.png",
+    "vendor": "Planifyit",
+    "webcomponents": [
+        {
+            "kind": "main",
+            "tag": "chord-diagram-widget",
+            "url": "https://planifyit.github.io/Chord_Diagram/ChordDiagramWidget.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties": {
+        "width": {
+            "type": "integer",
+            "default": 750
+        },
+        "height": {
+            "type": "integer",
+            "default": 700
+        }
+    },
+    "methods": {
+        "getDataSource": {
+            "parameters": [],
+            "body": "return this.dataBindings.getDataBinding('dataBinding').getDataSource();",
+            "returnType": "DataSource"
+        }
+    },
+    "events": {},
+    "dataBindings": {
+        "myDataBinding": {
+            "feeds": [
+                {
+                    "id": "dimensions",
+                    "description": "Dimensions",
+                    "type": "dimension"
+                },
+                {
+                    "id": "measures",
+                    "description": "Measures",
+                    "type": "mainStructureMember"
+                }
+            ]
+        }
+    }
+}

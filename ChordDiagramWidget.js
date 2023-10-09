@@ -82,9 +82,12 @@
             }
         }
 
- transformToMatrix(data) {
+transformToMatrix(data) {
+    console.log("Original Data:", data);
+
     // Extract unique labels (countries) from data
     const labels = [...new Set(data.map(d => d.dimensions_0.label).concat(data.map(d => d.dimensions_1.label)))];
+    console.log("Labels:", labels);
 
     // Initialize an empty matrix with zeros
     const matrix = Array(labels.length).fill(null).map(() => Array(labels.length).fill(0));
@@ -97,11 +100,13 @@
         matrix[sourceIndex][targetIndex] = value;
     });
 
+    console.log("Transformed Data:", { labels, matrix });
     return {
         labels,
         matrix
     };
 }
+
 
      _handleGroupClick(d) {
             const { dimensions } = this._parseMetadata(this._props.metadata);

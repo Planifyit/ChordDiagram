@@ -89,8 +89,23 @@
     };
 }
 
-        _handleGroupHover(d) {
-            // Handle hover or click events on chord groups
+     _handleGroupClick(d) {
+            const { dimensions } = this._parseMetadata(this._props.metadata);
+            const [dimension] = dimensions;
+
+            const linkedAnalysis = this._props['dataBindings'].getDataBinding('myDataBinding').getLinkedAnalysis();
+
+            if (d.selected) {
+                linkedAnalysis.removeFilters();
+                d.selected = false;
+            } else {
+                const selection = {};
+                const key = dimension.key;
+                const dimensionId = dimension.id;
+                selection[dimensionId] = d.index;  // Assuming d.index is the ID of the group
+                linkedAnalysis.setFilters(selection);
+                d.selected = true;
+            }
         }
 
         _onResize() {
@@ -113,6 +128,23 @@
         _renderChart(data) {
             // Implement the D3.js logic to render the chord diagram using the matrix data
         }
+
+  _parseMetadata(metadata) {
+            const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata;
+            const dimensions = [];
+            for (const key in dimensionsMap) {
+                const dimension = dimensionsMap[key];
+                dimensions.push({ key, ...dimension });
+            }
+            const measures = [];
+            for (const key in measuresMap) {
+                const measure = measuresMap[key];
+                measures.push({ key, ...measure });
+            }
+            return { dimensions, measures, dimensionsMap, measuresMap };
+        }
+
+        
     }
 
     customElements.define('chord-diagram-widget', ChordDiagramWidget);

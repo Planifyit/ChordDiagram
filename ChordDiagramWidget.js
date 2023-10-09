@@ -139,9 +139,72 @@
             this.resizeObserver.disconnect();
         }
 
-        _renderChart(data) {
-            // Implement the D3.js logic to render the chord diagram using the matrix data
-        }
+    _renderChart(data) {
+    const width = this._props.width || this.offsetWidth;
+    const height = this._props.height || this.offsetHeight;
+    const outerRadius = Math.min(width, height) * 0.5 - 40;
+    const innerRadius = outerRadius - 30;
+
+    d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
+
+    const svg = d3.select(this._shadowRoot.getElementById('chart'))
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", `translate(${width / 2},${height / 2})`);
+
+    const chord = d3.chord()
+        .padAngle(0.05)
+        .sortSubgroups(d3.descending);
+
+    const arc = d3.arc()
+        .innerRadius(innerRadius)
+        .outerRadius(outerRadius);
+
+    const ribbon = d3.ribbon()
+        .radius(innerRadius);
+
+    const color = d3.scaleOrdinal()
+        .domain(data.labels)
+        .range(d3.schemeCategory10);
+
+    const chords = chord(data.matrix);
+
+    // Draw the arcs
+    svg.append("g")
+        .attr("class", "arcs")
+        .selectAll("path")
+        .data(chords.groups)
+        .enter().append("path")
+        .attr("fill", d => color(data.labels[d.index]))
+        .attr("stroke", d => d3.rgb(color(data.labels[d.index])).darker())
+        .attr("d", arc)
+        .on("click", d => this._handleGroupClick(d));
+
+    // Draw the ribbons
+    svg.append("g")
+        .attr("class", "ribbons")
+        .selectAll("path")
+        .data(chords)
+        .enter().append("path")
+        .attr("d", ribbon)
+        .attr("fill", d => color(data.labels[d.target.index]))
+        .attr("stroke", d => d3.rgb(color(data.labels[d.target.index])).darker());
+
+    // Add labels
+    svg.append("g")
+        .attr("class", "labels")
+        .selectAll("g")
+        .data(chords.groups)
+        .enter().append("g")
+        .attr("transform", d => `rotate(${(d.startAngle + d.endAngle) / 2 * 180 / Math.PI - 90}) translate(${outerRadius + 10},0)`)
+        .append("text")
+        .attr("transform", d => (d.startAngle + d.endAngle) / 2 > Math.PI ? "rotate(180) translate(-16)" : null)
+        .attr("text-anchor", d => (d.startAngle + d.endAngle) / 2 > Math.PI ? "end" : null)
+        .text(d => data.labels[d.index]);
+}
+
 
   _parseMetadata(metadata) {
             const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata;

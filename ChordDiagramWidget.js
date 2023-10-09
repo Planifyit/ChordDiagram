@@ -1,16 +1,46 @@
 (function() {
     let tmpl = document.createElement('template');
+    const parseMetadata = metadata => {
+    const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata;
+    const dimensions = [];
+    for (const key in dimensionsMap) {
+        const dimension = dimensionsMap[key];
+        dimensions.push({ key, ...dimension });
+    }
+    const measures = [];
+    for (const key in measuresMap) {
+        const measure = measuresMap[key];
+        measures.push({ key, ...measure });
+    }
+    return { dimensions, measures, dimensionsMap, measuresMap };
+};
     tmpl.innerHTML = `
     <style>
-        /* Add your CSS styling here */
-        .chord path {
-            fill-opacity: 0.67;
-            stroke: #000;
-            stroke-width: 1px;
-        }
+    #chart {
+        width: 100%;
+        height: 100%;
+    }
+
+    .chord {
+        fill-opacity: 0.67;
+    }
+
+    .group {
+        fill: #ccc;
+        stroke: #000;
+        stroke-width: 1px;
+    }
+
+    .group text {
+        font-size: 12px;
+        pointer-events: none;
+    }
+
+    .ribbon {
+        border: 1px solid #ddd;
+    }
     </style>
     <div id="chart"></div>
-    <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
     `;
 
     class ChordDiagramWidget extends HTMLElement {
@@ -28,87 +58,60 @@
             this._shadowRoot.appendChild(script);
         }
 
-       onCustomWidgetBeforeUpdate(changedProperties) {
+        onCustomWidgetBeforeUpdate(changedProperties) {
             this._props = { ...this._props, ...changedProperties };
         }
 
-onCustomWidgetAfterUpdate(changedProperties) {
-    if ("myDataBinding" in changedProperties) {
-        this._updateData(changedProperties.myDataBinding);
-    }
-}
-
-
-        _updateData(dataBinding) {
-            // Logic to update data, check for readiness, etc.
-            // Transform data into a matrix suitable for a Chord Diagram.
-            if (this._ready) {
-                // Assume dataBinding.data is a suitable matrix for the Chord Diagram.
-                this._renderChart(dataBinding.data);
+        onCustomWidgetAfterUpdate(changedProperties) {
+            if ("myDataBinding" in changedProperties) {
+                this._updateData(changedProperties.myDataBinding);
             }
         }
 
-        _renderChart(matrix) {
-            console.log("Rendering with matrix:", matrix);
+ transformToMatrix(data) {
+    // Extract unique labels (countries) from data
+    const labels = [...new Set(data.map(d => d.dimensions_1.label).concat(data.map(d => d.dimensions_2.label)))];
 
-            const width = this._props.width || this.offsetWidth;
-            const height = this._props.height || this.offsetHeight;
-            const outerRadius = Math.min(width, height) * 0.5 - 40;
-            const innerRadius = outerRadius - 30;
+    // Initialize an empty matrix with zeros
+    const matrix = Array(labels.length).fill(null).map(() => Array(labels.length).fill(0));
 
-            d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
+    // Fill the matrix based on data
+    data.forEach(d => {
+        const sourceIndex = labels.indexOf(d.dimensions_1.label);
+        const targetIndex = labels.indexOf(d.dimensions_2.label);
+        const value = d.measures_0.raw;
+        matrix[sourceIndex][targetIndex] = value;
+    });
 
-            const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-                .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    return {
+        labels,
+        matrix
+    };
+}
 
-            const chord = d3.chord()
-                .padAngle(0.05)
-                .sortSubgroups(d3.descending);
+        _handleGroupHover(d) {
+            // Handle hover or click events on chord groups
+        }
 
-            const arc = d3.arc()
-                .innerRadius(innerRadius)
-                .outerRadius(outerRadius);
+        _onResize() {
+            this._renderChart(this.currentData);
+        }
 
-            const ribbon = d3.ribbon()
-                .radius(innerRadius);
+        _updateData(dataBinding) {
+            if (this._ready && dataBinding && dataBinding.data) {
+                const matrixData = this.transformToMatrix(dataBinding.data);
+                this.currentData = matrixData;
+                this._renderChart(matrixData);
+                this._props.metadata = dataBinding.metadata;
+            }
+        }
 
-            const color = d3.scaleOrdinal()
-                .domain(d3.range(4))
-                .range(["#0000ff", "#ffa500", "#ff0000", "#008000"]);
+        disconnectedCallback() {
+            this.resizeObserver.disconnect();
+        }
 
-            const chords = chord(matrix);
-
-            const group = svg.append("g")
-                .attr("font-size", 10)
-                .attr("font-family", "sans-serif")
-                .selectAll("g")
-                .data(chords.groups)
-                .join("g");
-
-            group.append("path")
-                .attr("fill", d => color(d.index))
-                .attr("stroke", d => d3.rgb(color(d.index)).darker())
-                .attr("d", arc);
-
-            group.append("text")
-                .each(d => (d.angle = (d.startAngle + d.endAngle) / 2))
-                .attr("dy", ".35em")
-                .attr("transform", d => `
-                    rotate(${(d.angle * 180 / Math.PI - 90)})
-                    translate(${innerRadius + 26})
-                    ${d.angle > Math.PI ? "rotate(180)" : ""}
-                `)
-                .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
-                .text(d => `Group ${d.index}`);
-
-            svg.append("g")
-                .attr("fill-opacity", 0.67)
-                .selectAll("path")
-                .data(chords)
-                .join("path")
-                .attr("stroke", d => d3.rgb(color(d.source.index)).darker())
-                .attr("fill", d => color(d.source.index))
-                .attr("d", ribbon);
+        _renderChart(data) {
+            // Implement the D3.js logic to render the chord diagram using the matrix data
         }
     }
 

@@ -13,7 +13,7 @@
         {
             "kind": "main",
             "tag": "chord-diagram-widget",
-            "url": "https://planifyit.github.io/Chord_Diagram/ChordDiagramWidget.js",
+            "url": "https://planifyit.github.io/ChordDiagram/ChordDiagramWidget.js",
             "integrity": "",
             "ignoreIntegrity": true
         }

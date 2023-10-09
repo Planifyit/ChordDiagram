@@ -28,8 +28,16 @@
             this._shadowRoot.appendChild(script);
         }
 
-        // Similar methods as in your Sunburst example...
-        // onCustomWidgetBeforeUpdate, onCustomWidgetAfterUpdate, disconnectedCallback, _onResize, etc.
+       onCustomWidgetBeforeUpdate(changedProperties) {
+            this._props = { ...this._props, ...changedProperties };
+        }
+
+onCustomWidgetAfterUpdate(changedProperties) {
+    if ("myDataBinding" in changedProperties) {
+        this._updateData(changedProperties.myDataBinding);
+    }
+}
+
 
         _updateData(dataBinding) {
             // Logic to update data, check for readiness, etc.

@@ -94,14 +94,18 @@
             this.resizeObserver = new ResizeObserver(() => this._onResize());
             this.resizeObserver.observe(this);
             
+
+
             const script = document.createElement('script');
-            script.src = 'https://d3js.org/d3.v7.min.js';
-          script.onload = () => {
+script.src = 'https://d3js.org/d3.v7.min.js';
+script.addEventListener('load', () => {
     this._ready = true;
     this._maybeRenderChart();
-};
+});
+this._shadowRoot.appendChild(script);
 
-            this._shadowRoot.appendChild(script);
+
+        
         }
 
         onCustomWidgetBeforeUpdate(changedProperties) {
@@ -160,11 +164,12 @@ transformToMatrix(data) {
             }
         }
 
-        _onResize() {
-             console.log("Resizing Chart");
-            this._renderChart(this.currentData);
-                console.log("Chart Resized");
-        }
+  _onResize() {
+    console.log("Resizing Chart");
+    this._maybeRenderChart();
+    console.log("Chart Resized");
+}
+
 
         _updateData(dataBinding) {
              console.log("Data Binding Received:", dataBinding);

@@ -71,7 +71,8 @@
 
     <div class="image-container"></div>    
     <div id="chart"></div>
-     <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
+    <div id="tooltip" style="position: absolute; opacity: 0; pointer-events: none; background-color: #f8f8f8; border: 1px solid #ccc; padding: 10px; border-radius: 4px;"></div>
+    <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
     `;
 
     class ChordDiagramWidget extends HTMLElement {
@@ -172,7 +173,8 @@ _renderChart(data) {
     const height = this._props.height || this.offsetHeight;
     const outerRadius = Math.min(width, height) * 0.5 - 40;
     const innerRadius = outerRadius - 30;
-
+    // Select the tooltip
+    const tooltip = d3.select("#tooltip");
     d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
     const svg = d3.select(this._shadowRoot.getElementById('chart'))
@@ -205,16 +207,28 @@ svg.append("g")
     .selectAll("path")
     .data(chords.groups)
     .enter().append("path")
+
+    
     .attr("fill", d => color(data.labels[d.index]))
     .attr("stroke", d => d3.rgb(color(data.labels[d.index])).darker())
     .attr("d", arc)
     .on("click", d => this._handleGroupClick(d))
-    .on("mouseover", function(d) {
-        d3.select(this).style("fill-opacity", 0.8); 
-    })
-    .on("mouseout", function(d) {
-        d3.select(this).style("fill-opacity", 1); 
-    });
+    .on("mouseover", function(event, d) {
+            d3.select(this).style("fill-opacity", 0.8); 
+            
+            // Update tooltip content and position, then make it visible
+            tooltip.html(`Group: ${data.labels[d.index]}<br>Value: ${d.value}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px")
+                .style("opacity", 1);
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).style("fill-opacity", 1); 
+            
+            // Hide the tooltip
+            tooltip.style("opacity", 0);
+        });
+
 
 // Add labels
 svg.append("g")

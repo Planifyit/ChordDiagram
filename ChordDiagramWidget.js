@@ -93,13 +93,18 @@
             this._props = {};
             this.resizeObserver = new ResizeObserver(() => this._onResize());
             this.resizeObserver.observe(this);
-            
+
+            this._updateData = this._updateData.bind(this);
+    this._maybeRenderChart = this._maybeRenderChart.bind(this);
+    this._renderChart = this._renderChart.bind(this);
 
 
             const script = document.createElement('script');
 script.src = 'https://d3js.org/d3.v7.min.js';
 script.addEventListener('load', () => {
+    console.log("D3 script loaded");
     this._ready = true;
+    console.log("this._ready set to true:", this._ready);
     this._maybeRenderChart();
 });
 this._shadowRoot.appendChild(script);
@@ -211,27 +216,34 @@ async _updateData(dataBinding) {
         }
 
 connectedCallback() {
-    const script = document.createElement('script');
-    script.src = 'https://d3js.org/d3.v7.min.js';
-    script.addEventListener('load', () => {
+    this.loadScript().then(() => {
         this._ready = true;
+        console.log("this._ready set to true:", this._ready);
         this._maybeRenderChart();
     });
-    script.addEventListener('error', () => {
-        console.error('Error loading D3 script');
+}
+
+async loadScript() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://d3js.org/d3.v7.min.js';
+        script.addEventListener('load', resolve);
+        script.addEventListener('error', reject);
+        this._shadowRoot.appendChild(script);
     });
-    this._shadowRoot.appendChild(script);
-    this._maybeRenderChart();
 }
 
 
 _maybeRenderChart() {
+    console.log("Checking render:", this._ready, this.currentData);
     if (this._ready && this.currentData) {
         this._renderChart(this.currentData);
     }
 }
+
         
 _renderChart(data) {
+    console.log("D3 available:", typeof d3 !== "undefined");
     console.log("Rendering Chart with Data:", data);
     const width = this._props.width || this.offsetWidth;
     const height = this._props.height || this.offsetHeight;

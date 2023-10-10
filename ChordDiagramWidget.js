@@ -181,22 +181,21 @@ transformToMatrix(data) {
         this._updateData(this._props.myDataBinding);
     }
 
-        _updateData(dataBinding) {
-             console.log("Data Binding Received:", dataBinding);
-        if (this._paused) {
-            console.log("Widget is paused, not updating data.");
-            return;
-        }
-           
-            if (this._ready && dataBinding && dataBinding.data) {
-                const matrixData = this.transformToMatrix(dataBinding.data);
-                this.currentData = matrixData;
-                this._renderChart(matrixData);
-                this._props.metadata = dataBinding.metadata;
-             console.log("Matrix Data for Rendering:", matrixData);
-            }
-     
-        }
+
+async _updateData(dataBinding) {
+    console.log("Data Binding Received:", dataBinding);
+    if (this._paused) {
+        console.log("Widget is paused, not updating data.");
+        return;
+    }
+    if (this._ready && dataBinding && dataBinding.data) {
+        const matrixData = this.transformToMatrix(dataBinding.data);
+        this.currentData = matrixData;
+        await this._renderChart(matrixData);  // Ensure this is awaited if it's async
+        this._props.metadata = dataBinding.metadata;
+        console.log("Matrix Data for Rendering:", matrixData);
+    }
+}
 
         disconnectedCallback() {
             this.resizeObserver.disconnect();

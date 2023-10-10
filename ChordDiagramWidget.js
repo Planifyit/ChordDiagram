@@ -288,7 +288,8 @@ svg.append("g")
         .attr("x2", innerRadius + 5)
         .attr("y2", 0)
         .attr("stroke", "#000")
-        .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${outerRadius},0)`)
+        .attr("transform", d => `rotate(${(d.angle * 180 / Math.PI - 90) + (outerRadius + 10)})`)
+
         .each(function(d) {
             console.log("Tick Data:", d);
             console.log("Tick Element:", this);
@@ -300,7 +301,8 @@ svg.append("g")
         .enter().append("text")
         .attr("x", innerRadius + 8)
         .attr("dy", ".35em")
-        .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${outerRadius},0) ${d.angle > Math.PI ? "rotate(180)" : ""}`)
+       .attr("transform", d => `rotate(${(d.angle * 180 / Math.PI - 90) + (outerRadius + 10)})`)
+
         .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
         .text(d => d.value)
         .each(function(d) {

@@ -119,6 +119,11 @@ this._shadowRoot.appendChild(script);
     this._maybeRenderChart();
 }
 
+           onCustomWidgetResume() {
+        console.log("Widget is resumed.");
+        this._paused = false;
+            this._refresh();
+    }
 transformToMatrix(data) {
     console.log("Original Data:", data);
 
@@ -170,9 +175,19 @@ transformToMatrix(data) {
     console.log("Chart Resized");
 }
 
+ _refresh() {
+        console.log("Manual refresh triggered.");
+        // Re-fetch data, re-render UI, or perform any other update logic here.
+        this._updateData(this._props.myDataBinding);
+    }
 
         _updateData(dataBinding) {
              console.log("Data Binding Received:", dataBinding);
+        if (this._paused) {
+            console.log("Widget is paused, not updating data.");
+            return;
+        }
+           
             if (this._ready && dataBinding && dataBinding.data) {
                 const matrixData = this.transformToMatrix(dataBinding.data);
                 this.currentData = matrixData;

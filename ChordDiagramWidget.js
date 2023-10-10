@@ -167,6 +167,15 @@ transformToMatrix(data) {
             this.resizeObserver.disconnect();
         }
 
+downloadSVG() {
+    html2canvas(document.querySelector("#chart")).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'chordDiagram.png';
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+        
 _renderChart(data) {
     console.log("Rendering Chart with Data:", data);
     const width = this._props.width || this.offsetWidth;
@@ -201,6 +210,12 @@ _renderChart(data) {
 
 
     const chords = chord(data.matrix);
+
+// Example of adding a transition to an arc
+svg.selectAll(".arc")
+    .transition()
+    .duration(750)
+    .attrTween("d", arcTween); 
 // Draw the arcs with transitions
 svg.append("g")
         .attr("class", "arcs")

@@ -198,9 +198,7 @@ _renderChart(data) {
     const ribbon = d3.ribbon()
         .radius(innerRadius);
 
-    const color = d3.scaleOrdinal()
-        .domain(data.labels)
-        .range(d3.schemeCategory10);
+
 
     const chords = chord(data.matrix);
 // Draw the arcs with transitions

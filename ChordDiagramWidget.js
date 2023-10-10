@@ -183,7 +183,14 @@ transformToMatrix(data) {
 
 
 async _updateData(dataBinding) {
+  
     console.log("Data Binding Received:", dataBinding);
+    // Check if dataBinding and dataBinding.data are defined and log the result
+    console.log("Data available:", !!dataBinding && !!dataBinding.data);
+    // Check if this._ready is true and log the result
+    console.log("this._ready:", this._ready);
+        
+   
     if (this._paused) {
         console.log("Widget is paused, not updating data.");
         return;

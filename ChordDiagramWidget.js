@@ -182,12 +182,6 @@ _renderChart(data) {
         .range(d3.schemeSet3);  // Using a different color scheme
     d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
-    const svg = d3.select(this._shadowRoot.getElementById('chart'))
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", `translate(${width / 2},${height / 2})`);
 
     const chord = d3.chord()
         .padAngle(0.05)

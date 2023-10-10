@@ -167,14 +167,7 @@ transformToMatrix(data) {
             this.resizeObserver.disconnect();
         }
 
-downloadSVG() {
-    html2canvas(document.querySelector("#chart")).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'chordDiagram.png';
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-    });
-}
+
         
 _renderChart(data) {
     console.log("Rendering Chart with Data:", data);
@@ -211,11 +204,14 @@ _renderChart(data) {
 
     const chords = chord(data.matrix);
 
-// Example of adding a transition to an arc
-svg.selectAll(".arc")
-    .transition()
-    .duration(750)
-    .attrTween("d", arcTween); 
+     // Remove the fixed width and height attributes from the SVG element
+    const svg = d3.select(this._shadowRoot.getElementById('chart'))
+        .append("svg")
+        .attr("viewBox", `0 0 ${width} ${height}`) // This makes it scalable
+        .attr("preserveAspectRatio", "xMinYMin meet") // This controls scaling
+        .append("g")
+        .attr("transform", `translate(${width / 2},${height / 2})`);
+
 // Draw the arcs with transitions
 svg.append("g")
         .attr("class", "arcs")

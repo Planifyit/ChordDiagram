@@ -301,13 +301,14 @@ ticksGroup.selectAll("text")
     .enter().append("text")
     .attr("x", 0)
     .attr("dy", ".35em")
-    .attr("transform", d => `translate(${outerRadius + 8},0) rotate(${d.angle * 180 / Math.PI - 90})`)
+    .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${outerRadius + 8},0) ${d.angle > Math.PI ? "rotate(180)" : ""}`)
     .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
     .text(d => d.value)
     .each(function(d) {
         console.log("Tick Label Data:", d);
         console.log("Tick Label Element:", this);
     });
+
 
 }
 

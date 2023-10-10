@@ -209,8 +209,9 @@ _renderChart(data) {
         .append("svg")
         .attr("viewBox", `0 0 ${width} ${height}`) // This makes it scalable
         .attr("preserveAspectRatio", "xMinYMin meet") // This controls scaling
-        .append("g")
-        .attr("transform", `translate(${width / 2},${height / 2})`);
+      .append("g")
+.attr("transform", `translate(${width / 2},${outerRadius + 40})`);
+
 
 // Draw the arcs with transitions
 svg.append("g")

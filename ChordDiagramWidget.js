@@ -295,20 +295,20 @@ ticksGroup.selectAll("line")
         console.log("Tick Element:", this);
     });
 
-
-  // Add tick labels
+// Add tick labels
 ticksGroup.selectAll("text")
     .data(d => tickValues(d))
     .enter().append("text")
-    .attr("x", innerRadius + 8)
+    .attr("x", 0)
     .attr("dy", ".35em")
-    .attr("transform", d => `translate(${outerRadius},0) rotate(${d.angle * 180 / Math.PI - 90})`)
+    .attr("transform", d => `translate(${outerRadius + 8},0) rotate(${d.angle * 180 / Math.PI - 90})`)
     .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
     .text(d => d.value)
     .each(function(d) {
         console.log("Tick Label Data:", d);
         console.log("Tick Label Element:", this);
     });
+
 }
 
 

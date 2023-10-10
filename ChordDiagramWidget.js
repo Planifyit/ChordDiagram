@@ -280,35 +280,35 @@ svg.append("g")
         .data(chords.groups)
         .enter().append("g");
 
-    ticksGroup.selectAll("line")
-        .data(d => tickValues(d))
-        .enter().append("line")
-        .attr("x1", innerRadius)
-        .attr("y1", 0)
-        .attr("x2", innerRadius + 5)
-        .attr("y2", 0)
-        .attr("stroke", "#000")
-        .attr("transform", d => `rotate(${(d.angle * 180 / Math.PI - 90) + (outerRadius + 10)})`)
+// Add ticks
+ticksGroup.selectAll("line")
+    .data(d => tickValues(d))
+    .enter().append("line")
+    .attr("x1", innerRadius)
+    .attr("y1", 0)
+    .attr("x2", innerRadius + 5)
+    .attr("y2", 0)
+    .attr("stroke", "#000")
+    .attr("transform", d => `translate(${outerRadius},0) rotate(${d.angle * 180 / Math.PI - 90})`)
+    .each(function(d) {
+        console.log("Tick Data:", d);
+        console.log("Tick Element:", this);
+    });
 
-        .each(function(d) {
-            console.log("Tick Data:", d);
-            console.log("Tick Element:", this);
-        });
 
-    // Add tick labels
-    ticksGroup.selectAll("text")
-        .data(d => tickValues(d))
-        .enter().append("text")
-        .attr("x", innerRadius + 8)
-        .attr("dy", ".35em")
-       .attr("transform", d => `rotate(${(d.angle * 180 / Math.PI - 90) + (outerRadius + 10)})`)
-
-        .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
-        .text(d => d.value)
-        .each(function(d) {
-            console.log("Tick Label Data:", d);
-            console.log("Tick Label Element:", this);
-        });
+  // Add tick labels
+ticksGroup.selectAll("text")
+    .data(d => tickValues(d))
+    .enter().append("text")
+    .attr("x", innerRadius + 8)
+    .attr("dy", ".35em")
+    .attr("transform", d => `translate(${outerRadius},0) rotate(${d.angle * 180 / Math.PI - 90})`)
+    .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
+    .text(d => d.value)
+    .each(function(d) {
+        console.log("Tick Label Data:", d);
+        console.log("Tick Label Element:", this);
+    });
 }
 
 

@@ -249,7 +249,7 @@ svg.append("g")
     .attr("text-anchor", d => (d.startAngle + d.endAngle) / 2 > Math.PI ? "end" : null)
     .text(d => data.labels[d.index])
     .style("font-family", "'Helvetica Neue', sans-serif")
-    .style("font-size", "30px")
+    .style("font-size", "20px")
     .style("fill", "#555"); 
 
 

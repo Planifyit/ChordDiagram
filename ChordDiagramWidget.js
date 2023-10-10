@@ -27,6 +27,45 @@
     }
     
 
+    #chart {
+        width: 100%;
+        height: 100%;
+    }
+
+    .chord {
+        fill-opacity: 0.67;
+    }
+
+    .group {
+        fill: #ccc;
+        stroke: #aaa; /* Lighter stroke color for a softer look */
+        stroke-width: 1px;
+    }
+
+    .group text {
+        font-size: 12px;
+        pointer-events: none;
+        font-family: 'San Francisco', 'Helvetica Neue', sans-serif;
+        fill: #555; /* Dark gray for better readability */
+    }
+
+    .ribbon {
+        border: 1px solid #ddd;
+    }
+
+    .follow-link {
+        font-family: 'San Francisco', 'Helvetica Neue', sans-serif;
+        color: #007aff; /* Apple link color */
+        text-decoration: none;
+        font-size: 12px;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    .follow-link:hover {
+        text-decoration: underline;
+    }
+</style>
 
 
 

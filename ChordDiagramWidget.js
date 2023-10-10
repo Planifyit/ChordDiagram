@@ -19,8 +19,16 @@
 :host {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;  /* Align children to the top */
+    align-items: stretch;
+    justify-content: flex-start;
     height: 100%;
+}
+
+#chart {
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
     
@@ -34,11 +42,9 @@
     }
     
 
-       #chart {
-        width: 100%;
-        height: 100%;
-        flex-grow: 1;  /* Allow chart to take up all available space */
-    }
+  
+
+
 
     .chord {
         fill-opacity: 0.67;
@@ -77,10 +83,11 @@
 
 
 
-    <div class="image-container"></div>    
-    <div id="chart"></div>
-    <div id="tooltip" style="position: absolute; opacity: 0; pointer-events: none; background-color: #f8f8f8; border: 1px solid #ccc; padding: 10px; border-radius: 4px;"></div>
-    <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
+  <div class="image-container"></div>    
+<div id="chart"></div>
+<div id="tooltip" style="position: absolute; opacity: 0; pointer-events: none; background-color: #f8f8f8; border: 1px solid #ccc; padding: 10px; border-radius: 4px;"></div>
+<a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
+
     `;
 
     class ChordDiagramWidget extends HTMLElement {

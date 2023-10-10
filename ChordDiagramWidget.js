@@ -175,6 +175,9 @@ _renderChart(data) {
     const innerRadius = outerRadius - 30;
     // Select the tooltip
     const tooltip = d3.select("#tooltip");
+      const color = d3.scaleOrdinal()
+        .domain(data.labels)
+        .range(d3.schemeSet3);  // Using a different color scheme
     d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
     const svg = d3.select(this._shadowRoot.getElementById('chart'))
@@ -200,35 +203,36 @@ _renderChart(data) {
         .range(d3.schemeCategory10);
 
     const chords = chord(data.matrix);
-
-  // Draw the arcs
+// Draw the arcs with transitions
 svg.append("g")
-    .attr("class", "arcs")
-    .selectAll("path")
-    .data(chords.groups)
-    .enter().append("path")
-
-    
-    .attr("fill", d => color(data.labels[d.index]))
-    .attr("stroke", d => d3.rgb(color(data.labels[d.index])).darker())
-    .attr("d", arc)
-    .on("click", d => this._handleGroupClick(d))
-    .on("mouseover", function(event, d) {
-            d3.select(this).style("fill-opacity", 0.8); 
-            
-            // Update tooltip content and position, then make it visible
+        .attr("class", "arcs")
+        .selectAll("path")
+        .data(chords.groups)
+        .enter().append("path")
+        .attr("fill", d => color(data.labels[d.index]))
+        .attr("stroke", d => d3.rgb(color(data.labels[d.index])).darker())
+        .attr("d", arc)
+        .on("click", d => this._handleGroupClick(d))
+        .on("mouseover", function(event, d) {
+            d3.select(this).transition().duration(300).style("fill-opacity", 0.8); 
             tooltip.html(`Group: ${data.labels[d.index]}<br>Value: ${d.value}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px")
                 .style("opacity", 1);
         })
         .on("mouseout", function(d) {
-            d3.select(this).style("fill-opacity", 1); 
-            
-            // Hide the tooltip
+            d3.select(this).transition().duration(300).style("fill-opacity", 1); 
             tooltip.style("opacity", 0);
+        })
+        .transition()  // Adding transition
+        .duration(750)  // Duration of transition in milliseconds
+        .attrTween("d", function(d) {
+            const i = d3.interpolate(d.startAngle + 0.1, d.endAngle);
+            return function(t) {
+                d.endAngle = i(t);
+                return arc(d);
+            }
         });
-
 
 // Add labels
 svg.append("g")

@@ -103,7 +103,9 @@ script.addEventListener('load', () => {
     this._maybeRenderChart();
 });
 this._shadowRoot.appendChild(script);
-
+script.addEventListener('error', () => {
+    console.error('Error loading D3 script');
+});
 
         
         }
@@ -208,9 +210,20 @@ async _updateData(dataBinding) {
             this.resizeObserver.disconnect();
         }
 
-        connectedCallback() {
+connectedCallback() {
+    const script = document.createElement('script');
+    script.src = 'https://d3js.org/d3.v7.min.js';
+    script.addEventListener('load', () => {
+        this._ready = true;
+        this._maybeRenderChart();
+    });
+    script.addEventListener('error', () => {
+        console.error('Error loading D3 script');
+    });
+    this._shadowRoot.appendChild(script);
     this._maybeRenderChart();
 }
+
 
 _maybeRenderChart() {
     if (this._ready && this.currentData) {

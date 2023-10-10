@@ -38,15 +38,15 @@
 
     .group {
         fill: #ccc;
-        stroke: #aaa; /* Lighter stroke color for a softer look */
+        stroke: #eee; 
         stroke-width: 1px;
     }
 
     .group text {
         font-size: 12px;
         pointer-events: none;
-        font-family: 'San Francisco', 'Helvetica Neue', sans-serif;
-        fill: #555; /* Dark gray for better readability */
+        font-family: 'Helvetica Neue', sans-serif;
+        fill: #555; 
     }
 
     .ribbon {
@@ -54,8 +54,8 @@
     }
 
     .follow-link {
-        font-family: 'San Francisco', 'Helvetica Neue', sans-serif;
-        color: #007aff; /* Apple link color */
+        font-family: 'Helvetica Neue', sans-serif;
+        color: #007aff; 
         text-decoration: none;
         font-size: 12px;
         margin-top: 10px;
@@ -199,7 +199,7 @@ _renderChart(data) {
 
     const chords = chord(data.matrix);
 
-    // Draw the arcs
+  // Draw the arcs
 svg.append("g")
     .attr("class", "arcs")
     .selectAll("path")
@@ -210,10 +210,10 @@ svg.append("g")
     .attr("d", arc)
     .on("click", d => this._handleGroupClick(d))
     .on("mouseover", function(d) {
-        d3.select(this).style("fill-opacity", 0.8); // Highlight on hover
+        d3.select(this).style("fill-opacity", 0.8); 
     })
     .on("mouseout", function(d) {
-        d3.select(this).style("fill-opacity", 1); // Remove highlight on mouseout
+        d3.select(this).style("fill-opacity", 1); 
     });
 
 // Add labels
@@ -227,9 +227,10 @@ svg.append("g")
     .attr("transform", d => (d.startAngle + d.endAngle) / 2 > Math.PI ? "rotate(180) translate(-16)" : null)
     .attr("text-anchor", d => (d.startAngle + d.endAngle) / 2 > Math.PI ? "end" : null)
     .text(d => data.labels[d.index])
-    .style("font-family", "'San Francisco', 'Helvetica Neue', sans-serif")
+    .style("font-family", "'Helvetica Neue', sans-serif")
     .style("font-size", "10px")
-    .style("fill", "#555"); // Dark gray for better readability
+    .style("fill", "#555"); 
+
 
     // Draw the ribbons
     svg.append("g")

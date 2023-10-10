@@ -104,11 +104,12 @@
             this._props = { ...this._props, ...changedProperties };
         }
 
-        onCustomWidgetAfterUpdate(changedProperties) {
-            if ("myDataBinding" in changedProperties) {
-                this._updateData(changedProperties.myDataBinding);
-            }
-        }
+ onCustomWidgetAfterUpdate(changedProperties) {
+    if ("myDataBinding" in changedProperties) {
+        this._updateData(changedProperties.myDataBinding);
+    }
+    this._maybeRenderChart();
+}
 
 transformToMatrix(data) {
     console.log("Original Data:", data);
@@ -177,7 +178,15 @@ transformToMatrix(data) {
             this.resizeObserver.disconnect();
         }
 
+        connectedCallback() {
+    this._maybeRenderChart();
+}
 
+_maybeRenderChart() {
+    if (this._ready && this.currentData) {
+        this._renderChart(this.currentData);
+    }
+}
         
 _renderChart(data) {
     console.log("Rendering Chart with Data:", data);

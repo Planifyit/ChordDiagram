@@ -16,7 +16,12 @@
 };
     tmpl.innerHTML = `
     <style>
-
+  :host {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
 .image-container {
         width: 100%;
         height: 100px;
@@ -27,9 +32,10 @@
     }
     
 
-    #chart {
+       #chart {
         width: 100%;
         height: 100%;
+        flex-grow: 1;  /* Allow chart to take up all available space */
     }
 
     .chord {

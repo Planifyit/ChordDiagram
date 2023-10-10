@@ -96,7 +96,11 @@
             
             const script = document.createElement('script');
             script.src = 'https://d3js.org/d3.v7.min.js';
-            script.onload = () => this._ready = true;
+          script.onload = () => {
+    this._ready = true;
+    this._maybeRenderChart();
+};
+
             this._shadowRoot.appendChild(script);
         }
 

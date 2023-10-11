@@ -20,12 +20,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Ensure items are justified to the start */
+    justify-content: flex-start; 
 }
 
 #chart {
     width: 100%;
-    height: calc(100% - 100px); /* Adjust height to account for image container */
+    height: calc(100% - 100px); 
     flex-grow: 1;
 }
 
@@ -170,7 +170,7 @@ transformToMatrix(data) {
                 const selection = {};
                 const key = dimension.key;
                 const dimensionId = dimension.id;
-                selection[dimensionId] = d.index;  // Assuming d.index is the ID of the group
+                selection[dimensionId] = d.index;  
                 linkedAnalysis.setFilters(selection);
                 d.selected = true;
             }
